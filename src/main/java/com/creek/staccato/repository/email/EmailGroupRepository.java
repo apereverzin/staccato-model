@@ -10,16 +10,19 @@ import javax.mail.MessagingException;
 import com.creek.staccato.connector.mail.ConnectorException;
 import com.creek.staccato.connector.mail.MailMessageConnector;
 import com.creek.staccato.domain.group.Group;
+import com.creek.staccato.domain.group.GroupInformationMessages;
 import com.creek.staccato.domain.group.GroupKey;
 import com.creek.staccato.domain.group.GroupRepository;
 import com.creek.staccato.domain.message.generic.GenericMessage;
 import com.creek.staccato.domain.profile.Profile;
 import com.creek.staccato.domain.profile.ProfileKey;
-import com.creek.staccato.domain.profile.ProfileMessages;
+import com.creek.staccato.domain.profile.ProfileInformationMessages;
 import com.creek.staccato.domain.repositorymessage.RepositoryException;
 import com.creek.staccato.domain.repositorymessage.RepositoryGroup;
+import com.creek.staccato.domain.repositorymessage.RepositoryGroupInformationMessages;
 import com.creek.staccato.domain.repositorymessage.RepositoryMessage;
 import com.creek.staccato.domain.repositorymessage.RepositoryProfile;
+import com.creek.staccato.domain.repositorymessage.RepositoryProfileInformationMessages;
 
 /**
  * 
@@ -243,7 +246,7 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
     @Override
     public Profile createProfile(Profile profile) throws RepositoryException {
         saveData(new RepositoryProfile(profile, VERSION), profile.getProfileKey(), PROFILES_FOLDER_NAME, MAX_PROFILES_LEVEL, MAX_PROFILES_FOLDER_SIZE, INITIAL_PROFILES_BASE);
-        ProfileMessages profileMessages = new ProfileMessages(profile.getProfileKey());
+        ProfileInformationMessages profileMessages = new ProfileInformationMessages(profile.getProfileKey());
         return profile;
     }
 
@@ -301,6 +304,43 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
             throw new RepositoryException(ex);
         }
     }
+
+	@Override
+	public GroupInformationMessages getGroupInformationMessages(GroupKey groupKey)
+			throws RepositoryException {
+        try {
+            Folder groupsFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, GROUPS_FOLDER_NAME);
+            RepositoryGroupInformationMessages repositoryGroup = (RepositoryGroupInformationMessages) connector.getMessageBySubject(groupsFolder, groupKey.toJSON().toString());
+            if (repositoryGroup == null) {
+                return null;
+            }
+            return repositoryGroup.getData();
+        } catch (ConnectorException ex) {
+            throw new RepositoryException(ex);
+        }
+	}
+
+	@Override
+	public ProfileInformationMessages getProfileInformationMessages(ProfileKey profileKey)
+			throws RepositoryException {
+        try {
+            initIfNecessary();
+            Folder profilesFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, PROFILES_FOLDER_NAME);
+            Folder folder = getFolderForData(profilesFolder, getProfileCode(profileKey), MAX_PROFILES_LEVEL, INITIAL_PROFILES_BASE);
+            if (folder == null) {
+                return null;
+            }
+			RepositoryProfileInformationMessages repositoryProfileInformationMessages = (RepositoryProfileInformationMessages) connector
+					.getMessageBySubject(folder, profileKey.toJSON().toString()
+							+ "_INF");
+            if (repositoryProfileInformationMessages == null) {
+                return null;
+            }
+            return repositoryProfileInformationMessages.getData();
+        } catch (ConnectorException ex) {
+            throw new RepositoryException(ex);
+        }
+	}
 
     private int getProfileCode(ProfileKey profileKey) {
         return profileKey.hashCode();

@@ -26,6 +26,8 @@ public interface GenericMessage extends Transformable {
     public static final int REPOSITORY_GROUP = 118;
     public static final int REPOSITORY_PROFILE = 119;
     public static final int REPOSITORY_INFORMATION_MESSAGE = 120;
+    public static final int REPOSITORY_PROFILE_INFORMATION_MESSAGES = 121;
+    public static final int REPOSITORY_GROUP_INFORMATION_MESSAGES = 122;
     
     int getMessageType();
     

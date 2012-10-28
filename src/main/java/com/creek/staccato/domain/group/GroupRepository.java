@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.creek.staccato.domain.profile.Profile;
 import com.creek.staccato.domain.profile.ProfileKey;
+import com.creek.staccato.domain.profile.ProfileInformationMessages;
 import com.creek.staccato.domain.repositorymessage.RepositoryException;
 
 /**
@@ -21,6 +22,8 @@ public interface GroupRepository {
     public Set<Group> getGroups() throws RepositoryException;
 
     public Group getGroup(GroupKey groupKey) throws RepositoryException;
+
+    public GroupInformationMessages getGroupInformationMessages(GroupKey groupKey) throws RepositoryException;
 
     public boolean addProfileToGroup(GroupKey groupKey, ProfileKey profileKey) throws RepositoryException;
 
@@ -43,4 +46,6 @@ public interface GroupRepository {
     public Profile updateMyProfile(Profile profile) throws RepositoryException;
 
     public Profile getProfile(ProfileKey profileKey) throws RepositoryException;
+
+    public ProfileInformationMessages getProfileInformationMessages(ProfileKey profileKey) throws RepositoryException;
 }

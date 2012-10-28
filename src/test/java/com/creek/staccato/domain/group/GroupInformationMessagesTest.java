@@ -7,9 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.creek.staccato.AbstractRepositoryTest;
-import com.creek.staccato.domain.group.Group;
-import com.creek.staccato.domain.message.MessageKey;
-import com.creek.staccato.domain.profile.ProfileKey;
 import com.creek.staccato.domain.util.JSONTransformer;
 
 /**
@@ -17,22 +14,22 @@ import com.creek.staccato.domain.util.JSONTransformer;
  * @author Andrey Pereverzin
  *
  */
-public class GroupMessagesTest extends AbstractRepositoryTest {
-	private GroupMessages groupMessages;
+public class GroupInformationMessagesTest extends AbstractRepositoryTest {
+	private GroupInformationMessages groupInformationMessages;
 	
 	@Before
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		groupMessages = new GroupMessages(groupKey1);
-		groupMessages.getInformationMessageKeys().add(messageKey1);
-		groupMessages.getInformationMessageKeys().add(messageKey2);
+		groupInformationMessages = new GroupInformationMessages(groupKey1);
+		groupInformationMessages.getInformationMessageKeys().add(messageKey1);
+		groupInformationMessages.getInformationMessageKeys().add(messageKey2);
 	}
 	
     @Test
     public void testTransformGroupMessages() throws ParseException {
-        JSONObject jsonGroupMessages = groupMessages.toJSON();
-        String s = jsonGroupMessages.toString();
+        JSONObject jsonGroupInformationMessages = groupInformationMessages.toJSON();
+        String s = jsonGroupInformationMessages.toString();
 
         JSONParser parser = new JSONParser();
 		JSONTransformer transformer = new JSONTransformer();
@@ -40,8 +37,8 @@ public class GroupMessagesTest extends AbstractRepositoryTest {
 
 		JSONObject value = (JSONObject) transformer.getResult();
 
-		GroupMessages groupMessagesRes = new GroupMessages(value);
-		assertEquals(groupMessages.getGroupKey(),
+		GroupInformationMessages groupMessagesRes = new GroupInformationMessages(value);
+		assertEquals(groupInformationMessages.getGroupKey(),
 				groupMessagesRes.getGroupKey());
 		assertEquals(2, groupMessagesRes.getInformationMessageKeys().size());
         assertTrue(groupMessagesRes.getInformationMessageKeys().contains(messageKey1));

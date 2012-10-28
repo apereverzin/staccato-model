@@ -15,21 +15,21 @@ import com.creek.staccato.domain.profile.ProfileKey;
  *
  */
 @SuppressWarnings("serial")
-public class ProfileMessages implements Transformable {
+public class ProfileInformationMessages implements Transformable {
     private ProfileKey profileKey;
     private SortedSet<Long> informationMessageKeys = new TreeSet<Long>();
     
     private static final String PROFILE_KEY = "profileKey";
     private static final String INFORMATION_MESSAGES = "informationMessages";
 
-    public ProfileMessages(ProfileKey profileKey) {
+    public ProfileInformationMessages(ProfileKey profileKey) {
         if(profileKey == null) {
             throw new IllegalArgumentException("No parameter should be null");
         }
         this.profileKey = profileKey;
     }
     
-    public ProfileMessages(JSONObject jsonObject) {
+    public ProfileInformationMessages(JSONObject jsonObject) {
         if(jsonObject == null) {
             throw new IllegalArgumentException("No parameter should be null");
         }
@@ -77,7 +77,7 @@ public class ProfileMessages implements Transformable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ProfileMessages other = (ProfileMessages) obj;
+        ProfileInformationMessages other = (ProfileInformationMessages) obj;
         if (profileKey == null) {
             if (other.profileKey != null)
                 return false;

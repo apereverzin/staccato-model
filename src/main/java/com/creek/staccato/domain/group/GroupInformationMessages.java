@@ -1,5 +1,6 @@
 package com.creek.staccato.domain.group;
 
+import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -15,21 +16,21 @@ import com.creek.staccato.domain.message.generic.Transformable;
  *
  */
 @SuppressWarnings("serial")
-public class GroupMessages implements Transformable {
+public class GroupInformationMessages implements Transformable {
     private GroupKey groupKey;
-    private SortedSet<MessageKey> informationMessageKeys = new TreeSet<MessageKey>();
+    private SortedSet<MessageKey> informationMessageKeys = new TreeSet<MessageKey>(new MessageKeysComparator());
     
     private static final String GROUP_KEY = "groupKey";
     private static final String INFORMATION_MESSAGES = "informationMessages";
 
-    public GroupMessages(GroupKey groupKey) {
+    public GroupInformationMessages(GroupKey groupKey) {
         if(groupKey == null) {
             throw new IllegalArgumentException("No parameter should be null");
         }
         this.groupKey = groupKey;
     }
     
-    public GroupMessages(JSONObject jsonObject) {
+    public GroupInformationMessages(JSONObject jsonObject) {
         if(jsonObject == null) {
             throw new IllegalArgumentException("No parameter should be null");
         }
@@ -77,12 +78,24 @@ public class GroupMessages implements Transformable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GroupMessages other = (GroupMessages) obj;
+        GroupInformationMessages other = (GroupInformationMessages) obj;
         if (groupKey == null) {
             if (other.groupKey != null)
                 return false;
         } else if (!groupKey.equals(other.groupKey))
             return false;
         return true;
+    }
+    
+    class MessageKeysComparator implements Comparator<MessageKey> {
+    	public int compare(MessageKey key1, MessageKey key2) {
+    		if(key1.getTimestamp() > key2.getTimestamp()) {
+    			return -1;
+    		} else if(key1.getTimestamp() < key2.getTimestamp()) {
+    			return 1;
+    		} else {
+    			return key1.getSender().getEmailAddress().compareTo(key2.getSender().getEmailAddress());
+    		}
+    	}
     }
 }

@@ -7,9 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.creek.staccato.AbstractRepositoryTest;
-import com.creek.staccato.domain.group.Group;
-import com.creek.staccato.domain.message.MessageKey;
-import com.creek.staccato.domain.profile.ProfileKey;
 import com.creek.staccato.domain.util.JSONTransformer;
 
 /**
@@ -17,8 +14,8 @@ import com.creek.staccato.domain.util.JSONTransformer;
  * @author Andrey Pereverzin
  *
  */
-public class ProfileMessagesTest extends AbstractRepositoryTest {
-	private ProfileMessages profileMessages;
+public class ProfileInformationMessagesTest extends AbstractRepositoryTest {
+	private ProfileInformationMessages profileInformationMessages;
 	private long timestamp1 = System.currentTimeMillis();
 	private long timestamp2 = System.currentTimeMillis() + 10000;
 	
@@ -26,14 +23,14 @@ public class ProfileMessagesTest extends AbstractRepositoryTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		profileMessages = new ProfileMessages(profile1.getProfileKey());
-		profileMessages.getInformationMessageKeys().add(timestamp1);
-		profileMessages.getInformationMessageKeys().add(timestamp2);
+		profileInformationMessages = new ProfileInformationMessages(profile1.getProfileKey());
+		profileInformationMessages.getInformationMessageKeys().add(timestamp1);
+		profileInformationMessages.getInformationMessageKeys().add(timestamp2);
 	}
 	
     @Test
     public void testTransformGroupMessages() throws ParseException {
-        JSONObject jsonProfileMessages = profileMessages.toJSON();
+        JSONObject jsonProfileMessages = profileInformationMessages.toJSON();
         String s = jsonProfileMessages.toString();
 
         JSONParser parser = new JSONParser();
@@ -42,8 +39,8 @@ public class ProfileMessagesTest extends AbstractRepositoryTest {
 
 		JSONObject value = (JSONObject) transformer.getResult();
 
-		ProfileMessages profileMessagesRes = new ProfileMessages(value);
-		assertEquals(profileMessages.getProfileKey(),
+		ProfileInformationMessages profileMessagesRes = new ProfileInformationMessages(value);
+		assertEquals(profileInformationMessages.getProfileKey(),
 				profileMessagesRes.getProfileKey());
 		assertEquals(2, profileMessagesRes.getInformationMessageKeys().size());
         assertTrue(profileMessagesRes.getInformationMessageKeys().contains(timestamp1));

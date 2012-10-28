@@ -7,9 +7,11 @@ import java.util.Set;
 
 import com.creek.staccato.domain.group.Group;
 import com.creek.staccato.domain.group.GroupKey;
+import com.creek.staccato.domain.group.GroupInformationMessages;
 import com.creek.staccato.domain.group.GroupRepository;
 import com.creek.staccato.domain.profile.Profile;
 import com.creek.staccato.domain.profile.ProfileKey;
+import com.creek.staccato.domain.profile.ProfileInformationMessages;
 import com.creek.staccato.domain.repositorymessage.RepositoryException;
 
 /**
@@ -52,6 +54,10 @@ public class EmulatorGroupRepository implements GroupRepository {
     
     public Group getGroup(GroupKey groupKey) throws RepositoryException {
         return groups.get(groupKey);
+    }
+    
+    public GroupInformationMessages getGroupInformationMessages(GroupKey groupKey) throws RepositoryException {
+        return null;
     }
     
     public boolean addProfileToGroup(GroupKey groupKey, ProfileKey profileKey) throws RepositoryException {
@@ -106,6 +112,10 @@ public class EmulatorGroupRepository implements GroupRepository {
     
     public Profile getProfile(ProfileKey profileKey) throws RepositoryException {
         return profiles.get(profileKey);
+    }
+
+    public ProfileInformationMessages getProfileInformationMessages(ProfileKey profileKey) throws RepositoryException {
+        return null;
     }
 
     public Set<ProfileKey> getFreeProfileKeys() throws RepositoryException {

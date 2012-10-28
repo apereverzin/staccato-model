@@ -6,10 +6,8 @@ import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 import com.creek.staccato.AbstractRepositoryTest;
-import com.creek.staccato.domain.group.Group;
 import com.creek.staccato.domain.message.GroupMembershipInvitationResponse;
 import com.creek.staccato.domain.message.MessageKey;
-import com.creek.staccato.domain.profile.ProfileKey;
 import com.creek.staccato.domain.util.JSONTransformer;
 import com.creek.staccato.repository.email.AbstractRepository;
 
