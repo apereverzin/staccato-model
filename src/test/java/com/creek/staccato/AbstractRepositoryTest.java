@@ -31,6 +31,8 @@ public class AbstractRepositoryTest extends TestCase {
     protected Group group1;
     protected GroupKey groupKey2;
     protected Group group2;
+    protected MessageKey messageKey1;
+    protected MessageKey messageKey2;
 
     @Before
     @Override
@@ -62,6 +64,9 @@ public class AbstractRepositoryTest extends TestCase {
         myProfile.setCountryCode("UK");
         myProfile.setMobilePhone("4412322");
         myProfile.setComment("my comment");
+        
+        messageKey1 = new MessageKey(profile11.getProfileKey(), System.currentTimeMillis());
+        messageKey2 = new MessageKey(profile12.getProfileKey(), System.currentTimeMillis());
     }
 
     protected Profile createProfile(int ind) {

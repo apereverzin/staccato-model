@@ -17,7 +17,7 @@ import com.creek.staccato.domain.message.generic.Transformable;
 @SuppressWarnings("serial")
 public class GroupMessages implements Transformable {
     private GroupKey groupKey;
-    private SortedSet<MessageKey> informationMessages = new TreeSet<MessageKey>();
+    private SortedSet<MessageKey> informationMessageKeys = new TreeSet<MessageKey>();
     
     private static final String GROUP_KEY = "groupKey";
     private static final String INFORMATION_MESSAGES = "informationMessages";
@@ -36,7 +36,7 @@ public class GroupMessages implements Transformable {
         this.groupKey = new GroupKey((JSONObject)jsonObject.get(GROUP_KEY));
         JSONArray informationMessagesArray = (JSONArray)jsonObject.get(INFORMATION_MESSAGES);
         for(Object informationMessageObject: informationMessagesArray) {
-            informationMessages.add(new MessageKey((JSONObject)informationMessageObject));
+            informationMessageKeys.add(new MessageKey((JSONObject)informationMessageObject));
         }
     }
 
@@ -44,18 +44,20 @@ public class GroupMessages implements Transformable {
         return groupKey;
     }
 
-    public SortedSet<MessageKey> getInformationMessages() {
-        return informationMessages;
+    public SortedSet<MessageKey> getInformationMessageKeys() {
+        return informationMessageKeys;
     }
+    
     @SuppressWarnings("unchecked")
     public JSONObject toJSON() {
-        JSONObject groupObject = new JSONObject();
-        groupObject.put(GROUP_KEY, getGroupKey().toJSON());
+        JSONObject groupMessagesObject = new JSONObject();
+        groupMessagesObject.put(GROUP_KEY, getGroupKey().toJSON());
         JSONArray informationMessagesArray = new JSONArray();
-        for(MessageKey informationMessage: informationMessages) {
-            informationMessagesArray.add(informationMessage.toJSON());
+        for(MessageKey informationMessageKey: informationMessageKeys) {
+            informationMessagesArray.add(informationMessageKey.toJSON());
         }
-        return groupObject;
+        groupMessagesObject.put(INFORMATION_MESSAGES, informationMessagesArray);
+        return groupMessagesObject;
     }
 
     @Override

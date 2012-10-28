@@ -25,86 +25,80 @@ import com.creek.staccato.repository.email.MailMessageCommunicator;
  * 
  */
 public class EmailMessageRepositoryIT extends
-        AbstractAdressedMessageIntegrationTest {
-    @Test
-    public void tes1tSendReceiveInformationMessage() {
-        try {
-            MessageCommunicator communicator1 = new MailMessageCommunicator(
-                    connector1);
-            MessageCommunicator communicator2 = new MailMessageCommunicator(
-                    connector2);
-            MailNode node1 = new MailNode(communicator1, profileKey1);
-            MailNode node2 = new MailNode(communicator2, profileKey2);
-            
-            MailNode nodeFrom = node1;
-            MailNode nodeTo = node2;
-            
-            long timestamp = System.currentTimeMillis();
+		AbstractAdressedMessageIntegrationTest {
+	@Test
+	public void tes1tSendReceiveInformationMessage() throws Exception {
+		MessageCommunicator communicator1 = new MailMessageCommunicator(
+				connector1);
+		MessageCommunicator communicator2 = new MailMessageCommunicator(
+				connector2);
+		MailNode node1 = new MailNode(communicator1, profileKey1);
+		MailNode node2 = new MailNode(communicator2, profileKey2);
 
-            MessageKey messageKey = new MessageKey(nodeFrom.getProfileKey(), timestamp);
-            Set<GroupKey> groupsTo = new HashSet<GroupKey>();
-            Set<ProfileKey> profilesTo = new HashSet<ProfileKey>();
-            profilesTo.add(nodeTo.getProfileKey());
-            InformationMessage message = new InformationMessage("title", "text" + timestamp,
-                    groupsTo, profilesTo, messageKey, AbstractRepository.VERSION);
-            nodeFrom.getMessageCommunicator().sendMessage(message);
-            
-            try {
-                Thread.sleep(10000);
-            } catch(InterruptedException ex) {
-                //
-            }
-            
-            Set<? extends AddressedMessage> messages = nodeTo.getMessageCommunicator().receiveMessages();
-            assertEquals(1, messages.size());
-        } catch (CommunicationException ex) {
-            ex.printStackTrace();
-            fail();
-        } catch (RepositoryException ex) {
-            ex.printStackTrace();
-            fail();
-        }
-    }
+		MailNode nodeFrom = node1;
+		MailNode nodeTo = node2;
 
-    @Test
-    public void testSendReceiveAddressedMesages() {
-        try {
-            MessageCommunicator communicator1 = new MailMessageCommunicator(connector1);
-            MessageCommunicator communicator2 = new MailMessageCommunicator(connector2);
-            MailNode node1 = new MailNode(communicator1, profileKey1);
-            MailNode node2 = new MailNode(communicator2, profileKey2);
-            
-            MailNode nodeFrom = node2;
-            MailNode nodeTo = node1;
-            
-            long timestamp = System.currentTimeMillis();
+		long timestamp = System.currentTimeMillis();
 
-            MessageKey messageKey = new MessageKey(nodeFrom.getProfileKey(), timestamp);
-            Set<GroupKey> groupsTo = new HashSet<GroupKey>();
-            Set<ProfileKey> profilesTo = new HashSet<ProfileKey>();
-            profilesTo.add(nodeTo.getProfileKey());
-            InformationMessage message = new InformationMessage("title", "text" + timestamp,
-                    groupsTo, profilesTo, messageKey, AbstractRepository.VERSION);
-            Request request = new GroupMembershipInvitationRequest(groupKey1, profilesTo, "text" + timestamp, messageKey, 
-                    AbstractRepository.VERSION);
-            nodeFrom.getMessageCommunicator().sendMessage(message);
-            nodeFrom.getMessageCommunicator().sendMessage(request);
-            
-            try {
-                Thread.sleep(10000);
-            } catch(InterruptedException ex) {
-                //
-            }
-            
-            Set<? extends AddressedMessage> messages = nodeTo.getMessageCommunicator().receiveMessages();
-            assertEquals(2, messages.size());
-        } catch (CommunicationException ex) {
-            ex.printStackTrace();
-            fail();
-        } catch (RepositoryException ex) {
-            ex.printStackTrace();
-            fail();
-        }
+		MessageKey messageKey = new MessageKey(nodeFrom.getProfileKey(),
+				timestamp);
+		Set<GroupKey> groupsTo = new HashSet<GroupKey>();
+		Set<ProfileKey> profilesTo = new HashSet<ProfileKey>();
+		profilesTo.add(nodeTo.getProfileKey());
+		InformationMessage message = new InformationMessage("title", "text"
+				+ timestamp, groupsTo, profilesTo, messageKey,
+				AbstractRepository.VERSION);
+		nodeFrom.getMessageCommunicator().sendMessage(message);
+
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException ex) {
+			//
+		}
+
+		Set<? extends AddressedMessage> messages = nodeTo
+				.getMessageCommunicator().receiveMessages();
+		assertEquals(1, messages.size());
+	}
+
+	@Test
+	public void testSendReceiveAddressedMesages()
+			throws CommunicationException, RepositoryException {
+		MessageCommunicator communicator1 = new MailMessageCommunicator(
+				connector1);
+		MessageCommunicator communicator2 = new MailMessageCommunicator(
+				connector2);
+		MailNode node1 = new MailNode(communicator1, profileKey1);
+		MailNode node2 = new MailNode(communicator2, profileKey2);
+
+		MailNode nodeFrom = node2;
+		MailNode nodeTo = node1;
+
+		long timestamp = System.currentTimeMillis();
+
+		MessageKey messageKey = new MessageKey(nodeFrom.getProfileKey(),
+				timestamp);
+		Set<GroupKey> groupsTo = new HashSet<GroupKey>();
+		Set<ProfileKey> profilesTo = new HashSet<ProfileKey>();
+		profilesTo.add(nodeTo.getProfileKey());
+		InformationMessage message = new InformationMessage("title", "text"
+				+ timestamp, groupsTo, profilesTo, messageKey,
+				AbstractRepository.VERSION);
+		Request request = new GroupMembershipInvitationRequest(groupKey1,
+				profilesTo, "text" + timestamp, messageKey,
+				AbstractRepository.VERSION);
+		nodeFrom.getMessageCommunicator().sendMessage(message);
+		nodeFrom.getMessageCommunicator().sendMessage(request);
+
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException ex) {
+			//
+		}
+
+		Set<? extends AddressedMessage> messages = nodeTo
+				.getMessageCommunicator().receiveMessages();
+		assertEquals(2, messages.size());
     }
 
     private class MailNode {

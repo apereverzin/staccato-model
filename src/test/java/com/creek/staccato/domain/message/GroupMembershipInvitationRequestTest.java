@@ -22,7 +22,7 @@ import com.creek.staccato.repository.email.AbstractRepository;
  */
 public class GroupMembershipInvitationRequestTest extends AbstractRepositoryTest {
     @Test
-    public void testTransformGroupMembershipInvitationRequestTest() {
+    public void testTransformGroupMembershipInvitationRequestTest() throws ParseException {
         long timestamp = System.currentTimeMillis();
         MessageKey messageKey = new MessageKey(profile11.getProfileKey(),
                 timestamp);
@@ -34,23 +34,22 @@ public class GroupMembershipInvitationRequestTest extends AbstractRepositoryTest
         JSONObject jsonGroup = message.toJSON();
         String s = jsonGroup.toString();
         JSONParser parser = new JSONParser();
-        try {
-            JSONTransformer transformer = new JSONTransformer();
-            System.out.println(s);
-            parser.parse(s, transformer);
+		JSONTransformer transformer = new JSONTransformer();
+		System.out.println(s);
+		parser.parse(s, transformer);
 
-            JSONObject value = (JSONObject) transformer.getResult();
+		JSONObject value = (JSONObject) transformer.getResult();
 
-            GroupMembershipInvitationRequest messageRes = new GroupMembershipInvitationRequest(value);
-            assertEquals(message.getGroupKey(), messageRes.getGroupKey());
-            assertEquals(message.getProfilesTo().size(), messageRes.getProfilesTo().size());
-            assertTrue(message.getProfilesTo().containsAll(messageRes.getProfilesTo()));
-            assertEquals(message.getRequestText(), messageRes.getRequestText());
-            assertEquals(message.getMessageKey(), messageRes.getMessageKey());
-            assertEquals(message.getProductVersion(), messageRes.getProductVersion());
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-            fail();
-        }
+		GroupMembershipInvitationRequest messageRes = new GroupMembershipInvitationRequest(
+				value);
+		assertEquals(message.getGroupKey(), messageRes.getGroupKey());
+		assertEquals(message.getProfilesTo().size(), messageRes.getProfilesTo()
+				.size());
+		assertTrue(message.getProfilesTo().containsAll(
+				messageRes.getProfilesTo()));
+		assertEquals(message.getRequestText(), messageRes.getRequestText());
+		assertEquals(message.getMessageKey(), messageRes.getMessageKey());
+		assertEquals(message.getProductVersion(),
+				messageRes.getProductVersion());
     }
 }

@@ -6,7 +6,6 @@ import java.util.TreeSet;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.creek.staccato.domain.message.MessageKey;
 import com.creek.staccato.domain.message.generic.Transformable;
 import com.creek.staccato.domain.profile.ProfileKey;
 
@@ -18,7 +17,7 @@ import com.creek.staccato.domain.profile.ProfileKey;
 @SuppressWarnings("serial")
 public class ProfileMessages implements Transformable {
     private ProfileKey profileKey;
-    private SortedSet<Long> informationMessages = new TreeSet<Long>();
+    private SortedSet<Long> informationMessageKeys = new TreeSet<Long>();
     
     private static final String PROFILE_KEY = "profileKey";
     private static final String INFORMATION_MESSAGES = "informationMessages";
@@ -37,7 +36,7 @@ public class ProfileMessages implements Transformable {
         this.profileKey = new ProfileKey((JSONObject)jsonObject.get(PROFILE_KEY));
         JSONArray informationMessagesArray = (JSONArray)jsonObject.get(INFORMATION_MESSAGES);
         for(Object informationMessageObject: informationMessagesArray) {
-            informationMessages.add((Long)informationMessageObject);
+            informationMessageKeys.add((Long)informationMessageObject);
         }
     }
 
@@ -45,19 +44,20 @@ public class ProfileMessages implements Transformable {
         return profileKey;
     }
 
-    public SortedSet<Long> getInformationMessages() {
-        return informationMessages;
+    public SortedSet<Long> getInformationMessageKeys() {
+        return informationMessageKeys;
     }
     
     @SuppressWarnings("unchecked")
     public JSONObject toJSON() {
-        JSONObject groupObject = new JSONObject();
-        groupObject.put(PROFILE_KEY, getProfileKey().toJSON());
+        JSONObject profileMessagesObject = new JSONObject();
+        profileMessagesObject.put(PROFILE_KEY, getProfileKey().toJSON());
         JSONArray informationMessagesArray = new JSONArray();
-        for(Long informationMessage: informationMessages) {
+        for(Long informationMessage: informationMessageKeys) {
             informationMessagesArray.add(informationMessage);
         }
-        return groupObject;
+        profileMessagesObject.put(INFORMATION_MESSAGES, informationMessagesArray);
+        return profileMessagesObject;
     }
 
     @Override

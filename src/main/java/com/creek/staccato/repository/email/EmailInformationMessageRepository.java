@@ -27,11 +27,6 @@ public class EmailInformationMessageRepository extends AbstractHierarchyReposito
     public InformationMessage saveInformationMessage(InformationMessage message) throws RepositoryException {
         saveData(new RepositoryInformationMessage(message, VERSION), message.getMessageKey(), GROUPS_INFORMATION_MESSAGES_FOLDER_NAME, MAX_MESSAGES_LEVEL_NUMBER, MAX_MESSAGES_FOLDER_SIZE, INITIAL_MESSAGES_BASE);
 
-        // get repository profile
-        // add message to the repository profile
-        // get repository group
-        // add message to the repository group
-        // add message to recent messages
         return message;
     }
 }

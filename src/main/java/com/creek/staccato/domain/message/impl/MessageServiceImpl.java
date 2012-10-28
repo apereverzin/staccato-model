@@ -4,7 +4,9 @@ import java.util.Set;
 
 import com.creek.staccato.connector.mail.MailMessageConnector.Result;
 import com.creek.staccato.domain.BusinessException;
+import com.creek.staccato.domain.group.Group;
 import com.creek.staccato.domain.group.GroupKey;
+import com.creek.staccato.domain.group.GroupRepository;
 import com.creek.staccato.domain.message.CommunicationException;
 import com.creek.staccato.domain.message.GroupMembershipInvitationRequest;
 import com.creek.staccato.domain.message.GroupMembershipInvitationResponse;
@@ -21,6 +23,7 @@ import com.creek.staccato.domain.message.MessageKey;
 import com.creek.staccato.domain.message.MessageRepository;
 import com.creek.staccato.domain.message.MessageService;
 import com.creek.staccato.domain.message.generic.AddressedMessage;
+import com.creek.staccato.domain.profile.Profile;
 import com.creek.staccato.domain.profile.ProfileKey;
 import com.creek.staccato.domain.repositorymessage.RepositoryException;
 
@@ -31,6 +34,7 @@ import com.creek.staccato.domain.repositorymessage.RepositoryException;
  */
 public class MessageServiceImpl implements MessageService {
     private MessageRepository messageRepository;
+    private GroupRepository groupRepository;
     private InformationMessageRepository informationMessageRepository;
     private MessageCommunicator messageCommunicator;
 
@@ -163,6 +167,19 @@ public class MessageServiceImpl implements MessageService {
     public void saveInformationMessage(InformationMessage message) throws BusinessException {
         try {
             informationMessageRepository.saveInformationMessage(message);
+            
+            // get repository profile
+            Profile profileFrom = groupRepository.getProfile(message.getMessageKey().getSender());
+            
+            // add message to the repository profile
+            
+            // get repository group
+            Group groupTo = groupRepository.getGroup(message.getGroupsTo().iterator().next());
+            
+            // add message to the repository group
+            
+            // add message to recent messages
+
         } catch (RepositoryException ex) {
             throw new BusinessException(ex);
         }
@@ -217,6 +234,10 @@ public class MessageServiceImpl implements MessageService {
 
     public void setInformationMessageRepository(InformationMessageRepository informationMessageRepository) {
         this.informationMessageRepository = informationMessageRepository;
+    }
+
+    public void setGroupRepository(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
     }
 
     public void setMessageCommunicator(MessageCommunicator messageCommunicator) {

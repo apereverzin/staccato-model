@@ -23,7 +23,7 @@ import com.creek.staccato.repository.email.AbstractRepository;
  */
 public class ProfileCreatedTest extends AbstractRepositoryTest {
     @Test
-    public void testTransformInformationMessage() {
+    public void testTransformInformationMessage() throws ParseException {
         long timestamp = System.currentTimeMillis();
         Collection<GroupKey> groupsTo = new HashSet<GroupKey>();
         groupsTo.add(group2.getGroupKey());
@@ -34,22 +34,18 @@ public class ProfileCreatedTest extends AbstractRepositoryTest {
 
         JSONObject jsonGroup = message.toJSON();
         String s = jsonGroup.toString();
-        JSONParser parser = new JSONParser();
-        try {
-            JSONTransformer transformer = new JSONTransformer();
-            System.out.println(s);
-            parser.parse(s, transformer);
+		JSONParser parser = new JSONParser();
+		JSONTransformer transformer = new JSONTransformer();
+		System.out.println(s);
+		parser.parse(s, transformer);
 
-            JSONObject value = (JSONObject) transformer.getResult();
+		JSONObject value = (JSONObject) transformer.getResult();
 
-            ProfileAddedToGroup messageRes = new ProfileAddedToGroup(value);
-            assertEquals(message.getProfile(), messageRes.getProfile());
-            assertEquals(message.getGroupTo(), messageRes.getGroupTo());
-            assertEquals(message.getMessageKey(), messageRes.getMessageKey());
-            assertEquals(message.getProductVersion(), messageRes.getProductVersion());
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-            fail();
-        }
+		ProfileAddedToGroup messageRes = new ProfileAddedToGroup(value);
+		assertEquals(message.getProfile(), messageRes.getProfile());
+		assertEquals(message.getGroupTo(), messageRes.getGroupTo());
+		assertEquals(message.getMessageKey(), messageRes.getMessageKey());
+		assertEquals(message.getProductVersion(),
+				messageRes.getProductVersion());
     }
 }

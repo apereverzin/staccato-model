@@ -17,28 +17,22 @@ import com.creek.staccato.domain.util.JSONTransformer;
  */
 public class GroupTest extends AbstractRepositoryTest {
     @Test
-    public void testTransformGroup() {
+    public void testTransformGroup() throws ParseException {
         JSONObject jsonGroup = group1.toJSON();
         String s = jsonGroup.toString();
 
         JSONParser parser = new JSONParser();
-        try {
-            JSONTransformer transformer = new JSONTransformer();
-            System.out.println(s);
-            parser.parse(s, transformer);
-            
-            JSONObject value = (JSONObject)transformer.getResult();
-            
-            Group groupRes = new Group(value);
-            assertEquals(group1.getGroupKey(), groupRes.getGroupKey());
-            assertEquals(group1.getIncludeVotes(), groupRes.getIncludeVotes());
-            assertEquals(group1.getExcludeVotes(), groupRes.getExcludeVotes());
-            assertEquals(group1.getDescription(), groupRes.getDescription());
-            ProfileKey founderKey1 = groupRes.getGroupKey().getFounderKey();
-            assertEquals(profile1.getProfileKey(), founderKey1);
-        } catch(ParseException ex) {
-            ex.printStackTrace();
-            fail();
-        }
+		JSONTransformer transformer = new JSONTransformer();
+		parser.parse(s, transformer);
+
+		JSONObject value = (JSONObject) transformer.getResult();
+
+		Group groupRes = new Group(value);
+		assertEquals(group1.getGroupKey(), groupRes.getGroupKey());
+		assertEquals(group1.getIncludeVotes(), groupRes.getIncludeVotes());
+		assertEquals(group1.getExcludeVotes(), groupRes.getExcludeVotes());
+		assertEquals(group1.getDescription(), groupRes.getDescription());
+		ProfileKey founderKey1 = groupRes.getGroupKey().getFounderKey();
+		assertEquals(profile1.getProfileKey(), founderKey1);
     }
 }

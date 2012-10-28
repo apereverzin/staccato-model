@@ -18,7 +18,7 @@ import com.creek.staccato.repository.email.AbstractRepository;
  */
 public class GroupOwnershipInvitationResponseTest extends AbstractRepositoryTest {
     @Test
-    public void testTransformGroupOwnerInvitationResponseTest() {
+    public void testTransformGroupOwnerInvitationResponseTest() throws ParseException {
         long timestamp = System.currentTimeMillis();
         MessageKey messageKey = new MessageKey(profile11.getProfileKey(), timestamp);
         MessageKey messageKey0 = new MessageKey(profile1.getProfileKey(), timestamp);
@@ -27,22 +27,19 @@ public class GroupOwnershipInvitationResponseTest extends AbstractRepositoryTest
         JSONObject jsonGroup = message.toJSON();
         String s = jsonGroup.toString();
         JSONParser parser = new JSONParser();
-        try {
-            JSONTransformer transformer = new JSONTransformer();
-            System.out.println(s);
-            parser.parse(s, transformer);
-            
-            JSONObject value = (JSONObject)transformer.getResult();
-            
-            GroupOwnershipInvitationResponse messageRes = new GroupOwnershipInvitationResponse(value);
-            assertEquals(message.getRequestKey(), messageRes.getRequestKey());
-            assertEquals(message.getResponseText(), messageRes.getResponseText());
-            assertEquals(message.isPositive(), messageRes.isPositive());
-            assertEquals(message.getMessageKey(), messageRes.getMessageKey());
-            assertEquals(message.getProductVersion(), messageRes.getProductVersion());
-        } catch(ParseException ex) {
-            ex.printStackTrace();
-            fail();
-        }
+		JSONTransformer transformer = new JSONTransformer();
+		System.out.println(s);
+		parser.parse(s, transformer);
+
+		JSONObject value = (JSONObject) transformer.getResult();
+
+		GroupOwnershipInvitationResponse messageRes = new GroupOwnershipInvitationResponse(
+				value);
+		assertEquals(message.getRequestKey(), messageRes.getRequestKey());
+		assertEquals(message.getResponseText(), messageRes.getResponseText());
+		assertEquals(message.isPositive(), messageRes.isPositive());
+		assertEquals(message.getMessageKey(), messageRes.getMessageKey());
+		assertEquals(message.getProductVersion(),
+				messageRes.getProductVersion());
     }
 }

@@ -24,24 +24,19 @@ public class AbstractIntegrationTest extends AbstractRepositoryTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        try {
-            Properties props1 = new Properties();
-            props1.load(new FileInputStream("E:\\Work\\staccato-model\\src\\main\\res\\mail1.properties"));
-            connector1 = new MailMessageConnector(props1);
-            Properties props2 = new Properties();
-            props2.load(new FileInputStream("E:\\Work\\staccato-model\\src\\main\\res\\mail2.properties"));
-            connector2 = new MailMessageConnector(props2);
-            Properties props3 = new Properties();
-            props3.load(new FileInputStream("E:\\Work\\staccato-model\\src\\main\\res\\mail3.properties"));
-            connector3 = new MailMessageConnector(props3);
-            
-            connector = connector3;
-        } catch(FileNotFoundException ex) {
-            ex.printStackTrace();
-            fail();
-        } catch(IOException ex) {
-            ex.printStackTrace();
-            fail();
-        }
+		Properties props1 = new Properties();
+		props1.load(new FileInputStream(
+				"E:\\Work\\staccato-model\\src\\main\\res\\mail1.properties"));
+		connector1 = new MailMessageConnector(props1);
+		Properties props2 = new Properties();
+		props2.load(new FileInputStream(
+				"E:\\Work\\staccato-model\\src\\main\\res\\mail2.properties"));
+		connector2 = new MailMessageConnector(props2);
+		Properties props3 = new Properties();
+		props3.load(new FileInputStream(
+				"E:\\Work\\staccato-model\\src\\main\\res\\mail3.properties"));
+		connector3 = new MailMessageConnector(props3);
+
+		connector = connector3;
     }
 }

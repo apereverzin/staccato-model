@@ -13,18 +13,13 @@ import com.creek.staccato.repository.email.EmailGroupRepository;
  */
 public class StressMailMessageConnectorTest extends AbstractIntegrationTest {
     @Test
-    public void testOneThousandProfiles() {
-        try {
-            EmailGroupRepository repository = new EmailGroupRepository(connector);
-            int count = 0;
-            while(count < 1000) {
-                repository.createProfile(createProfile(count));
-                System.out.println("i: " + count);
-                count++;
-            }
-        } catch(RepositoryException ex) {
-            ex.printStackTrace();
-            fail();
-        }
+    public void testOneThousandProfiles() throws RepositoryException {
+		EmailGroupRepository repository = new EmailGroupRepository(connector);
+		int count = 0;
+		while (count < 1000) {
+			repository.createProfile(createProfile(count));
+			System.out.println("i: " + count);
+			count++;
+		}
     }
 }
