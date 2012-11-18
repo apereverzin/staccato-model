@@ -21,11 +21,9 @@ public class SubjectSearchTerm extends SearchTerm {
     @Override
     public boolean match(Message msg) {
         try {
-            System.out.println("-----msg: " + msg);
-            System.out.println("-----msgNumber: " + msg.getMessageNumber());
-            System.out.println("-----contentType: " + msg.getContentType());
-            String msgSubj = msg.getSubject();
-            return subj.equalsIgnoreCase(msgSubj);
+            System.out.println("-----subj: " + subj);
+            System.out.println("-----msg.getSubject(): " + msg.getSubject());
+            return subj.equalsIgnoreCase(msg.getSubject());
         } catch(MessagingException ex) {
             ex.printStackTrace();
             return false;

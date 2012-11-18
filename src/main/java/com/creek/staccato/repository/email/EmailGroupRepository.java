@@ -35,6 +35,7 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
 
     private static final String MY_PROFILE_SUBJECT = "MYPROFILE";
     private static final String FREE_SUBJECT = "FREE";
+    private static final String INF = "_INF";
 
     public EmailGroupRepository(MailMessageConnector connector) throws RepositoryException {
         this(connector, true);
@@ -250,6 +251,7 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
         return profile;
     }
 
+	@Override
     public Profile updateProfile(Profile profile) throws RepositoryException {
         try {
             initIfNecessary();
@@ -270,6 +272,7 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
         }
     }
 
+	@Override
     public boolean deleteProfile(ProfileKey profileKey) throws RepositoryException {
         try {
             initIfNecessary();
@@ -287,6 +290,7 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
         }
     }
 
+	@Override
     public Profile getProfile(ProfileKey profileKey) throws RepositoryException {
         try {
             initIfNecessary();
@@ -310,33 +314,68 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
 			throws RepositoryException {
         try {
             Folder groupsFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, GROUPS_FOLDER_NAME);
-            RepositoryGroupInformationMessages repositoryGroup = (RepositoryGroupInformationMessages) connector.getMessageBySubject(groupsFolder, groupKey.toJSON().toString());
-            if (repositoryGroup == null) {
+            RepositoryGroupInformationMessages repositoryGroupInformationMessages = 
+            		(RepositoryGroupInformationMessages) connector.getMessageBySubject(groupsFolder, groupKey.toJSON().toString() + INF);
+            if (repositoryGroupInformationMessages == null) {
                 return null;
             }
-            return repositoryGroup.getData();
+            return repositoryGroupInformationMessages.getData();
         } catch (ConnectorException ex) {
             throw new RepositoryException(ex);
         }
 	}
 
 	@Override
-	public ProfileInformationMessages getProfileInformationMessages(ProfileKey profileKey)
-			throws RepositoryException {
+	public void updateGroupInformationMessages(GroupInformationMessages groupInformationMessages) throws RepositoryException {
+        try {
+            Folder groupsFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, GROUPS_FOLDER_NAME);
+            groupsFolder.open(Folder.READ_WRITE);
+            connector.removeMessage(groupsFolder, groupInformationMessages.getGroupKey().toJSON().toString() + INF);
+            RepositoryGroupInformationMessages repositoryGroupInformationMessages = 
+            		new RepositoryGroupInformationMessages(groupInformationMessages, VERSION);
+            connector.putRepositoryMessageToFolderWithUniqueSubject(
+            		groupsFolder, repositoryGroupInformationMessages, groupInformationMessages.getGroupKey().toJSON().toString() + INF);
+        } catch (MessagingException ex) {
+            throw new RepositoryException(ex);
+        } catch (ConnectorException ex) {
+            throw new RepositoryException(ex);
+        }
+	}
+
+	@Override
+	public ProfileInformationMessages getProfileInformationMessages(ProfileKey profileKey) throws RepositoryException {
         try {
             initIfNecessary();
             Folder profilesFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, PROFILES_FOLDER_NAME);
-            Folder folder = getFolderForData(profilesFolder, getProfileCode(profileKey), MAX_PROFILES_LEVEL, INITIAL_PROFILES_BASE);
-            if (folder == null) {
+            Folder profileFolder = getFolderForData(profilesFolder, getProfileCode(profileKey), MAX_PROFILES_LEVEL, INITIAL_PROFILES_BASE);
+            if (profileFolder == null) {
                 return null;
             }
-			RepositoryProfileInformationMessages repositoryProfileInformationMessages = (RepositoryProfileInformationMessages) connector
-					.getMessageBySubject(folder, profileKey.toJSON().toString()
-							+ "_INF");
+			RepositoryProfileInformationMessages repositoryProfileInformationMessages = 
+					(RepositoryProfileInformationMessages) connector.getMessageBySubject(profileFolder, profileKey.toJSON().toString() + INF);
             if (repositoryProfileInformationMessages == null) {
                 return null;
             }
             return repositoryProfileInformationMessages.getData();
+        } catch (ConnectorException ex) {
+            throw new RepositoryException(ex);
+        }
+	}
+
+	@Override
+	public void updateProfileInformationMessages(ProfileInformationMessages profileInformationMessages) throws RepositoryException {
+        try {
+            initIfNecessary();
+            Folder profilesFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, PROFILES_FOLDER_NAME);
+            Folder profileFolder = getFolderForData(profilesFolder, getProfileCode(profileInformationMessages.getProfileKey()), MAX_PROFILES_LEVEL, INITIAL_PROFILES_BASE);
+            profileFolder.open(Folder.READ_WRITE);
+            connector.removeMessage(profileFolder, profileInformationMessages.getProfileKey().toJSON().toString() + INF);
+            RepositoryProfileInformationMessages repositoryProfileInformationMessages = 
+            		new RepositoryProfileInformationMessages(profileInformationMessages, VERSION);
+            connector.putRepositoryMessageToFolderWithUniqueSubject(
+            		profileFolder, repositoryProfileInformationMessages, profileInformationMessages.getProfileKey().toJSON().toString() + INF);
+        } catch (MessagingException ex) {
+            throw new RepositoryException(ex);
         } catch (ConnectorException ex) {
             throw new RepositoryException(ex);
         }

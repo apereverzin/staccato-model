@@ -25,6 +25,8 @@ public interface GroupRepository {
 
     public GroupInformationMessages getGroupInformationMessages(GroupKey groupKey) throws RepositoryException;
 
+    public void updateGroupInformationMessages(GroupInformationMessages groupInformationMessages) throws RepositoryException;
+
     public boolean addProfileToGroup(GroupKey groupKey, ProfileKey profileKey) throws RepositoryException;
 
     public boolean removeProfileFromGroup(GroupKey groupKey, ProfileKey profileKey) throws RepositoryException;
@@ -48,4 +50,6 @@ public interface GroupRepository {
     public Profile getProfile(ProfileKey profileKey) throws RepositoryException;
 
     public ProfileInformationMessages getProfileInformationMessages(ProfileKey profileKey) throws RepositoryException;
+
+    public void updateProfileInformationMessages(ProfileInformationMessages profileInformationMessages) throws RepositoryException;
 }

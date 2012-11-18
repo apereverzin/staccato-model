@@ -121,4 +121,20 @@ public class EmulatorGroupRepository implements GroupRepository {
     public Set<ProfileKey> getFreeProfileKeys() throws RepositoryException {
         return Collections.EMPTY_SET;
     }
+
+	@Override
+	public void updateGroupInformationMessages(
+			GroupInformationMessages groupInformationMessages)
+			throws RepositoryException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateProfileInformationMessages(
+			ProfileInformationMessages profileInformationMessages)
+			throws RepositoryException {
+		// TODO Auto-generated method stub
+		
+	}
 }

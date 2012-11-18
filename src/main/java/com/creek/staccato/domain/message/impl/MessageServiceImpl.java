@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.creek.staccato.connector.mail.MailMessageConnector.Result;
 import com.creek.staccato.domain.BusinessException;
-import com.creek.staccato.domain.group.Group;
+import com.creek.staccato.domain.group.GroupInformationMessages;
 import com.creek.staccato.domain.group.GroupKey;
 import com.creek.staccato.domain.group.GroupRepository;
 import com.creek.staccato.domain.message.CommunicationException;
@@ -23,7 +23,7 @@ import com.creek.staccato.domain.message.MessageKey;
 import com.creek.staccato.domain.message.MessageRepository;
 import com.creek.staccato.domain.message.MessageService;
 import com.creek.staccato.domain.message.generic.AddressedMessage;
-import com.creek.staccato.domain.profile.Profile;
+import com.creek.staccato.domain.profile.ProfileInformationMessages;
 import com.creek.staccato.domain.profile.ProfileKey;
 import com.creek.staccato.domain.repositorymessage.RepositoryException;
 
@@ -168,15 +168,15 @@ public class MessageServiceImpl implements MessageService {
         try {
             informationMessageRepository.saveInformationMessage(message);
             
-            // get repository profile
-            Profile profileFrom = groupRepository.getProfile(message.getMessageKey().getSender());
-            
             // add message to the repository profile
-            
-            // get repository group
-            Group groupTo = groupRepository.getGroup(message.getGroupsTo().iterator().next());
+            ProfileInformationMessages profileInformationMessages = groupRepository.getProfileInformationMessages(message.getMessageKey().getSender());
+            profileInformationMessages.getInformationMessageKeys().add(message.getMessageKey().getTimestamp());
+            groupRepository.updateProfileInformationMessages(profileInformationMessages);
             
             // add message to the repository group
+            GroupInformationMessages groupInformationMessages = groupRepository.getGroupInformationMessages(message.getGroupsTo().iterator().next());
+            groupInformationMessages.getInformationMessageKeys().add(message.getMessageKey());
+            groupRepository.updateGroupInformationMessages(groupInformationMessages);
             
             // add message to recent messages
 
