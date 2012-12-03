@@ -157,17 +157,31 @@ public class MessageServiceImpl implements MessageService {
    @Override
    public Set<? extends AddressedMessage> getNewMessages() throws BusinessException {
         try {
-            return messageCommunicator.receiveMessages();
+            Set<AddressedMessage> newMessages = (Set<AddressedMessage>)messageCommunicator.receiveMessages();
+            for(AddressedMessage message: newMessages) {
+            	if(message instanceof InformationMessage) {
+            		copyInfMessage((InformationMessage)message);
+            	}
+            }
+            return newMessages;
         } catch (CommunicationException ex) {
             throw new BusinessException(ex);
         }
     }
 
     @Override
-    public void saveInformationMessage(InformationMessage message) throws BusinessException {
+    public void saveInfMessage(InformationMessage message) throws BusinessException {
         try {
+        	System.out.println("-----saveInfMessage111");
             informationMessageRepository.saveInformationMessage(message);
-            
+            copyInfMessage(message);
+        } catch (RepositoryException ex) {
+            throw new BusinessException(ex);
+        }
+    }
+
+    private void copyInfMessage(InformationMessage message) throws BusinessException {
+        try {
             // add message to the repository profile
             ProfileInformationMessages profileInformationMessages = groupRepository.getProfileInformationMessages(message.getMessageKey().getSender());
             profileInformationMessages.getInformationMessageKeys().add(message.getMessageKey().getTimestamp());
@@ -177,6 +191,7 @@ public class MessageServiceImpl implements MessageService {
             GroupInformationMessages groupInformationMessages = groupRepository.getGroupInformationMessages(message.getGroupsTo().iterator().next());
             groupInformationMessages.getInformationMessageKeys().add(message.getMessageKey());
             groupRepository.updateGroupInformationMessages(groupInformationMessages);
+            System.out.println("--------saveInfMessage");
             
             // add message to recent messages
 

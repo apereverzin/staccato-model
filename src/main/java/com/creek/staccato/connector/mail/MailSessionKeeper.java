@@ -91,10 +91,10 @@ public class MailSessionKeeper {
     }
     
     public void connectTransport(Transport transport) throws MessagingException {
-        transport.connect(mailProps.getProperty(MAIL_SMTP_HOST), Integer
-                .parseInt(mailProps.getProperty(MAIL_SMTP_PORT)), mailProps
-                .getProperty(MAIL_USERNAME), mailProps
-                .getProperty(MAIL_PASSWORD));
+        transport.connect(mailProps.getProperty(MAIL_SMTP_HOST), 
+        		Integer.parseInt(mailProps.getProperty(MAIL_SMTP_PORT)), 
+        		mailProps.getProperty(MAIL_USERNAME), 
+        		mailProps.getProperty(MAIL_PASSWORD));
     }
 
     public String getUsername() {

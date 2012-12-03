@@ -5,6 +5,7 @@ import java.util.Set;
 import com.creek.staccato.connector.mail.MailMessageConnector.Result;
 import com.creek.staccato.domain.BusinessException;
 import com.creek.staccato.domain.group.GroupKey;
+import com.creek.staccato.domain.group.GroupRepository;
 import com.creek.staccato.domain.message.generic.AddressedMessage;
 import com.creek.staccato.domain.profile.ProfileKey;
 
@@ -56,7 +57,7 @@ public interface MessageService {
 
     Set<? extends AddressedMessage> getNewMessages() throws BusinessException;
 
-    void saveInformationMessage(InformationMessage message) throws BusinessException;
+    void saveInfMessage(InformationMessage message) throws BusinessException;
 
     void saveInformationMessages(Set<InformationMessage> messages) throws BusinessException;
 
@@ -69,6 +70,8 @@ public interface MessageService {
     void setMessageRepository(MessageRepository messageRepository);
 
     void setInformationMessageRepository(InformationMessageRepository informationMessageRepository);
+    
+    public void setGroupRepository(GroupRepository groupRepository);
     
     void setMessageCommunicator(MessageCommunicator messageCommunicator);
 }

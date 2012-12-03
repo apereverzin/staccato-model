@@ -13,43 +13,43 @@ import com.creek.staccato.domain.repositorymessage.RepositoryException;
  * 
  */
 public interface GroupRepository {
-    public Group createGroup(Group group) throws RepositoryException;
+    Group createGroup(Group group) throws RepositoryException;
 
-    public Group updateGroup(Group group) throws RepositoryException;
+    Group updateGroup(Group group) throws RepositoryException;
 
-    public boolean deleteGroup(GroupKey groupKey) throws RepositoryException;
+    boolean deleteGroup(GroupKey groupKey) throws RepositoryException;
 
-    public Set<Group> getGroups() throws RepositoryException;
+    Set<Group> getGroups() throws RepositoryException;
 
-    public Group getGroup(GroupKey groupKey) throws RepositoryException;
+    Group getGroup(GroupKey groupKey) throws RepositoryException;
 
-    public GroupInformationMessages getGroupInformationMessages(GroupKey groupKey) throws RepositoryException;
+    GroupInformationMessages getGroupInformationMessages(GroupKey groupKey) throws RepositoryException;
 
-    public void updateGroupInformationMessages(GroupInformationMessages groupInformationMessages) throws RepositoryException;
+    void updateGroupInformationMessages(GroupInformationMessages groupInformationMessages) throws RepositoryException;
 
-    public boolean addProfileToGroup(GroupKey groupKey, ProfileKey profileKey) throws RepositoryException;
+    boolean addProfileToGroup(GroupKey groupKey, ProfileKey profileKey) throws RepositoryException;
 
-    public boolean removeProfileFromGroup(GroupKey groupKey, ProfileKey profileKey) throws RepositoryException;
+    boolean removeProfileFromGroup(GroupKey groupKey, ProfileKey profileKey) throws RepositoryException;
 
-    public Set<ProfileKey> getGroupProfileKeys(GroupKey groupKey) throws RepositoryException;
+    Set<ProfileKey> getGroupProfileKeys(GroupKey groupKey) throws RepositoryException;
 
-    public Set<ProfileKey> getFreeProfileKeys() throws RepositoryException;
+    Set<ProfileKey> getFreeProfileKeys() throws RepositoryException;
 
-    public Profile createProfile(Profile profile) throws RepositoryException;
+    Profile createProfile(Profile profile) throws RepositoryException;
 
-    public Profile updateProfile(Profile profile) throws RepositoryException;
+    Profile updateProfile(Profile profile) throws RepositoryException;
 
-    public boolean deleteProfile(ProfileKey profileKey) throws RepositoryException;
+    boolean deleteProfile(ProfileKey profileKey) throws RepositoryException;
 
-    public Profile createMyProfile(Profile profile) throws RepositoryException;
+    Profile createMyProfile(Profile profile) throws RepositoryException;
 
-    public Profile getMyProfile() throws RepositoryException;
+    Profile getMyProfile() throws RepositoryException;
 
-    public Profile updateMyProfile(Profile profile) throws RepositoryException;
+    Profile updateMyProfile(Profile profile) throws RepositoryException;
 
-    public Profile getProfile(ProfileKey profileKey) throws RepositoryException;
+    Profile getProfile(ProfileKey profileKey) throws RepositoryException;
 
-    public ProfileInformationMessages getProfileInformationMessages(ProfileKey profileKey) throws RepositoryException;
+    ProfileInformationMessages getProfileInformationMessages(ProfileKey profileKey) throws RepositoryException;
 
-    public void updateProfileInformationMessages(ProfileInformationMessages profileInformationMessages) throws RepositoryException;
+    void updateProfileInformationMessages(ProfileInformationMessages profileInformationMessages) throws RepositoryException;
 }

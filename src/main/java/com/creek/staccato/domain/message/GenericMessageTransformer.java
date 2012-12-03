@@ -5,8 +5,10 @@ import org.json.simple.JSONObject;
 import com.creek.staccato.domain.message.generic.AbstractGenericMessage;
 import com.creek.staccato.domain.message.generic.GenericMessage;
 import com.creek.staccato.domain.repositorymessage.RepositoryGroup;
+import com.creek.staccato.domain.repositorymessage.RepositoryGroupInformationMessages;
 import com.creek.staccato.domain.repositorymessage.RepositoryInformationMessage;
 import com.creek.staccato.domain.repositorymessage.RepositoryProfile;
+import com.creek.staccato.domain.repositorymessage.RepositoryProfileInformationMessages;
 import com.creek.staccato.domain.servicemessage.GroupCreated;
 import com.creek.staccato.domain.servicemessage.GroupDeleted;
 import com.creek.staccato.domain.servicemessage.GroupProfileUpdated;
@@ -70,6 +72,10 @@ public class GenericMessageTransformer {
             return new RepositoryProfile(jsonObject);
         } else if(messageType == GenericMessage.REPOSITORY_INFORMATION_MESSAGE) {
             return new RepositoryInformationMessage(jsonObject);
+        } else if(messageType == GenericMessage.REPOSITORY_GROUP_INFORMATION_MESSAGES) {
+            return new RepositoryGroupInformationMessages(jsonObject);
+        } else if(messageType == GenericMessage.REPOSITORY_PROFILE_INFORMATION_MESSAGES) {
+            return new RepositoryProfileInformationMessages(jsonObject);
         } else {
             throw new TransformException("Unknown message type " + messageType);
         }

@@ -315,9 +315,9 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
         try {
             Folder groupsFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, GROUPS_FOLDER_NAME);
             RepositoryGroupInformationMessages repositoryGroupInformationMessages = 
-            		(RepositoryGroupInformationMessages) connector.getMessageBySubject(groupsFolder, groupKey.toJSON().toString() + INF);
+            		(RepositoryGroupInformationMessages) connector.getMessageBySubject(groupsFolder, buildGroupInfMessagesSubject(groupKey));
             if (repositoryGroupInformationMessages == null) {
-                return null;
+                return new GroupInformationMessages(groupKey);
             }
             return repositoryGroupInformationMessages.getData();
         } catch (ConnectorException ex) {
@@ -330,11 +330,13 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
         try {
             Folder groupsFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, GROUPS_FOLDER_NAME);
             groupsFolder.open(Folder.READ_WRITE);
-            connector.removeMessage(groupsFolder, groupInformationMessages.getGroupKey().toJSON().toString() + INF);
+            String subject = buildGroupInfMessagesSubject(groupInformationMessages.getGroupKey());
+            connector.removeMessage(groupsFolder, subject);
             RepositoryGroupInformationMessages repositoryGroupInformationMessages = 
             		new RepositoryGroupInformationMessages(groupInformationMessages, VERSION);
             connector.putRepositoryMessageToFolderWithUniqueSubject(
-            		groupsFolder, repositoryGroupInformationMessages, groupInformationMessages.getGroupKey().toJSON().toString() + INF);
+            		groupsFolder, repositoryGroupInformationMessages, subject);
+            System.out.println("------updateGroupInformationMessages " + subject);
         } catch (MessagingException ex) {
             throw new RepositoryException(ex);
         } catch (ConnectorException ex) {
@@ -348,13 +350,13 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
             initIfNecessary();
             Folder profilesFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, PROFILES_FOLDER_NAME);
             Folder profileFolder = getFolderForData(profilesFolder, getProfileCode(profileKey), MAX_PROFILES_LEVEL, INITIAL_PROFILES_BASE);
-            if (profileFolder == null) {
-                return null;
-            }
+//            if (profileFolder == null) {
+//                return null;
+//            }
 			RepositoryProfileInformationMessages repositoryProfileInformationMessages = 
-					(RepositoryProfileInformationMessages) connector.getMessageBySubject(profileFolder, profileKey.toJSON().toString() + INF);
+					(RepositoryProfileInformationMessages) connector.getMessageBySubject(profileFolder, buildProfileInfMessagesSubject(profileKey));
             if (repositoryProfileInformationMessages == null) {
-                return null;
+                return new ProfileInformationMessages(profileKey);
             }
             return repositoryProfileInformationMessages.getData();
         } catch (ConnectorException ex) {
@@ -369,11 +371,12 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
             Folder profilesFolder = connector.getFolder(MESSAGES_DB_FOLDER_NAME, PROFILES_FOLDER_NAME);
             Folder profileFolder = getFolderForData(profilesFolder, getProfileCode(profileInformationMessages.getProfileKey()), MAX_PROFILES_LEVEL, INITIAL_PROFILES_BASE);
             profileFolder.open(Folder.READ_WRITE);
-            connector.removeMessage(profileFolder, profileInformationMessages.getProfileKey().toJSON().toString() + INF);
+            String subject = buildProfileInfMessagesSubject(profileInformationMessages.getProfileKey());
+            connector.removeMessage(profileFolder, subject);
             RepositoryProfileInformationMessages repositoryProfileInformationMessages = 
             		new RepositoryProfileInformationMessages(profileInformationMessages, VERSION);
             connector.putRepositoryMessageToFolderWithUniqueSubject(
-            		profileFolder, repositoryProfileInformationMessages, profileInformationMessages.getProfileKey().toJSON().toString() + INF);
+            		profileFolder, repositoryProfileInformationMessages, subject);
         } catch (MessagingException ex) {
             throw new RepositoryException(ex);
         } catch (ConnectorException ex) {
@@ -383,5 +386,13 @@ public class EmailGroupRepository extends AbstractHierarchyRepository<Repository
 
     private int getProfileCode(ProfileKey profileKey) {
         return profileKey.hashCode();
+    }
+    
+    private String buildProfileInfMessagesSubject(ProfileKey profileKey) {
+    	return profileKey.getEmailAddress() + INF;
+    }
+    
+    private String buildGroupInfMessagesSubject(GroupKey groupKey) {
+    	return groupKey.getName() + "_" + groupKey.getFounderKey().getEmailAddress() + INF;
     }
 }

@@ -25,7 +25,12 @@ public class EmailInformationMessageRepository extends AbstractHierarchyReposito
 
     @Override
     public InformationMessage saveInformationMessage(InformationMessage message) throws RepositoryException {
-        saveData(new RepositoryInformationMessage(message, VERSION), message.getMessageKey(), GROUPS_INFORMATION_MESSAGES_FOLDER_NAME, MAX_MESSAGES_LEVEL_NUMBER, MAX_MESSAGES_FOLDER_SIZE, INITIAL_MESSAGES_BASE);
+    	System.out.println("-----saveInformationMessage");
+        saveData(new RepositoryInformationMessage(message, VERSION), message.getMessageKey(), 
+        		GROUPS_INFORMATION_MESSAGES_FOLDER_NAME, 
+        		MAX_MESSAGES_LEVEL_NUMBER, 
+        		MAX_MESSAGES_FOLDER_SIZE, 
+        		INITIAL_MESSAGES_BASE);
 
         return message;
     }

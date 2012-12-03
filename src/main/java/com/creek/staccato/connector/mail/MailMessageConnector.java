@@ -79,6 +79,7 @@ public class MailMessageConnector {
             Set<Message> pendingRequests = new HashSet<Message>();
             Set<AddressedMessage> addressedMessages = new HashSet<AddressedMessage>();
 
+            System.out.println("--------receiveMessages");
             Message[] msgs = inboxFolder.search(new SubjectSearchTerm(STACCATO_SUBJECT));
             for (Message msg : msgs) {
                 try {
@@ -221,6 +222,7 @@ public class MailMessageConnector {
 
     public boolean putRepositoryMessageToFolderWithUniqueSubject(Folder folder, GenericMessage message, String subject) throws ConnectorException {
         try {
+            System.out.println("--------putRepositoryMessageToFolderWithUniqueSubject");
             Message[] msgs = folder.search(new SubjectSearchTerm(subject));
             for (Message msg : msgs) {
                 msg.setFlag(Flags.Flag.DELETED, true);
@@ -236,6 +238,7 @@ public class MailMessageConnector {
             mailMessage.setSubject(subject);
             mailMessage.setText(message.toJSON().toString());
             folder.appendMessages(new Message[] { mailMessage });
+            System.out.println("------" + folder.getName() + " " + subject);
             return true;
         } catch (MessagingException ex) {
             throw new ConnectorException(ex);
@@ -250,6 +253,7 @@ public class MailMessageConnector {
             }
 
             folder.open(Folder.READ_WRITE);
+            System.out.println("--------putRepositoryMessagesToFolder");
             for (int i = 0; i < subjects.length; i++) {
                 Message[] msgs = folder.search(new SubjectSearchTerm(subjects[i]));
                 for (Message msg : msgs) {
@@ -468,6 +472,7 @@ public class MailMessageConnector {
 
     private Message getMailMessageBySubject(Folder folder, String subject) throws ConnectorException {
         try {
+            System.out.println("--------getMailMessageBySubject");
             Message[] msgs = folder.search(new SubjectSearchTerm(subject));
             if (msgs.length > 0) {
                 return msgs[0];
